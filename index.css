@@ -1,0 +1,231 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #caf0f8;
+    /* Changed from #f0f0f0 to #caf0f8 */
+    margin: 0;
+    color: #22223b;
+    padding: 12px;
+}
+
+h1 {
+    color: #03045e;
+    font-size: 38px;
+    font-family: 'Roboto Slab', serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.icon {
+    font-size: 55px;
+}
+
+.flag {
+    width: 50px;
+    height: auto;
+    display: block;
+    margin: 10px auto;
+}
+
+.container {
+    background-color: white;
+    margin: auto;
+    padding: 20px;
+    max-width: 600px;
+    min-height: 95vh;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.display {
+    background-color: #caf0f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    white-space: pre-line;
+    min-height: 120px;
+    /* Increased from 80px */
+    font-size: 20px;
+    border-radius: 6px;
+    margin: 20px 0;
+    /* Increased top and bottom margin */
+    padding: 20px;
+    /* Added padding */
+    line-height: 1.5;
+    /* Improved line spacing */
+}
+
+form {
+    margin-top: 26px;
+}
+
+button {
+    color: white;
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.random-jokes-button {
+    background-color: mediumorchid;
+}
+
+.random-jokes-button:hover {
+    background-color: purple;
+}
+
+.first-joke-button {
+    background-color: mediumslateblue;
+}
+
+.first-joke-button:hover {
+    background-color: darkslateblue;
+}
+
+.last-joke-button {
+    background-color: mediumslateblue;
+}
+
+.last-joke-button:hover {
+    background-color: darkslateblue;
+}
+
+.nav-buttons {
+    background-color: slateGray;
+}
+
+.nav-buttons:hover {
+    background-color: dimgray;
+}
+
+.btn-secondary {
+    background-color: DarkTurquoise;
+}
+
+.btn-secondary:hover {
+    /* background-color: SteelBlue; */
+    background-color: RoyalBlue;
+}
+
+.submit-button {
+    background-color: purple;
+}
+
+.submit-button:hover {
+
+    background-color: magenta;
+}
+
+label {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+input[type="text"],
+textarea {
+    padding: 12px 10px;
+    margin: 10px 0;
+    width: 100%;
+    height: 100px;
+    /* Increased height */
+    border-radius: 4px;
+    border: solid 1px #03045e;
+    font-size: 16px;
+    /* Added for better readability */
+    resize: vertical;
+    /* Allows vertical resizing if using textarea */
+}
+
+.hidden {
+    display: none;
+}
+
+#jokeCounter {
+    font-size: 16px;
+    color: #0077b6;
+    margin-top: 10px;
+}
+
+.nav-button {
+    margin: 0 10px;
+    /* This adds horizontal spacing between buttons */
+}
+
+.prev-button {
+    background-color: #4a4e69;
+    /* A different color for the previous button */
+}
+
+.next-button {
+    background-color: #4a4e69;
+    /* A different color for the next button */
+}
+
+.random-button {
+    /* The existing style for the random button will apply here */
+    margin: none;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    .nav-button {
+        margin: 5px 0;
+        /* Vertical spacing for mobile */
+        width: 100%;
+        /* Full width buttons on mobile */
+    }
+}
+
+.nav-buttons-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.nav-button {
+    margin: 0 10px;
+}
+
+.prev-button,
+.next-button {
+    background-color: #4a4e69;
+}
+
+.add-jokes-button {
+    display: block;
+    margin: 0 auto;
+}
+
+.btn-delete {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background-color: #ff5252;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    .nav-buttons-container {
+        flex-direction: column;
+    }
+
+    .nav-button,
+    .add-jokes-button {
+        margin: 5px 0;
+        width: 100%;
+    }
+}

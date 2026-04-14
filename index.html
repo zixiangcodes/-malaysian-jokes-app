@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
+    <link rel="icon" href="images/vecteezy_circle-flag-of-malaysia_11571450.png" type="image/x-icon">
+    <title>Malaysian Jokes Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <div class="container">
+        <hr>
+        <h1>
+            <!-- <span class="icon material-symbols-outlined">person_celebrate</span> -->
+            <img src="images/vecteezy_circle-flag-of-malaysia_11571450.png" alt="Malaysian Flag" class="flag">
+            Malaysian Jokes Generator
+        </h1>
+
+        <p><b>Cause why not lah!!?</b></p>
+        <p class="display" id="joke-display"></p>
+        <hr>
+        <div>
+            <button class="first-joke-button" id="firstJokeButton">First Joke</button>
+            <button class="random-jokes-button" id="generateRandomJokeButton">Random Joke </button>
+            <button class="last-joke-button" id="lastJokeButton">Last Joke</button>
+        </div>
+
+        <div>
+            <button class="nav-buttons" id="prevJokeButton">Previous Joke</button>
+            <button class="nav-buttons" id="nextJokeButton">Next Joke</button>
+        </div>
+
+        <div>
+            <button class="btn-secondary" id="toggleFormButton">Add Joke</button>
+            <p id="successMessage" style="display: none">🥳 Jokes added successfully! 🎉</p>
+            <p id="boundaryMessage" style="display: none"></p>
+            <form id="jokeForm" class="hidden" autocomplete="off">
+                <label for="jokeInput">Write a Joke:</label>
+                <textarea id="jokeInput" rows="4"></textarea>
+                <button class="submit-button" type="submit">Submit</button>
+            </form>
+        </div>
+        <!-- <div>
+            <button id="deleteJokeButton" class="btn-delete">Delete Current Joke 🗑️</button>
+            <p id="deleteMessage" style="display: none">🗑️ Joke deleted successfully! 🎉</p>
+        </div> -->
+        <hr>
+        <p> By: Zack Ng | Last Updated: 15 April 2026, V1.0 | Firebase Realtime Database </p>
+        <p> Credits: Circle flag of Malaysia. Free PNG by stu - khaii at
+            <a href="https://www.vecteezy.com/png/11571450-circle-flag-of-malaysia" target="_blank"
+                rel="noopener noreferrer">
+                Vecteezy
+            </a>
+        </p>
+        <p id="jokeCounter">Total Jokes in Database: 0</p>
+        <hr>
+
+
+    </div>
+    <script src="index.js" type="module"></script>
+</body>
+
+</html>
