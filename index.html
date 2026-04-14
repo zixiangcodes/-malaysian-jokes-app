@@ -40,12 +40,9 @@
         </div>
 
         <div>
-            <button class="random-jokes-button" id="generateRandomJokeButton">Random Joke </button>
-        </div>
-
-        <div>
-            <button class="nav-buttons" id="prevJokeButton">Previous Joke</button>
-            <button class="nav-buttons" id="nextJokeButton">Next Joke</button>
+            <button class="nav-buttons" id="prevJokeButton">← Previous</button>
+            <button class="random-jokes-button" id="generateRandomJokeButton">🎲 Random </button>
+            <button class="nav-buttons" id="nextJokeButton">Next →</button>
         </div>
 
         <div>
@@ -62,17 +59,19 @@
             <button id="deleteJokeButton" class="btn-delete">Delete Current Joke 🗑️</button>
             <p id="deleteMessage" style="display: none">🗑️ Joke deleted successfully! 🎉</p>
         </div> -->
-        <hr>
-        <p> By: Zack Ng | Last Updated: 15 April 2026, V1.0 | Firebase Realtime Database </p>
-        <p> Credits: Circle flag of Malaysia. Free PNG by stu - khaii at
+        <hr class="divider">
+
+        <p class="footer">
+            By: Zack Ng &nbsp;|&nbsp; Last Updated: 15 April 2026, V1.0 &nbsp;|&nbsp; Firebase Realtime Database
+        </p>
+        <p class="footer">
+            Credits: Circle flag of Malaysia. Free PNG by stu - khaii at
             <a href="https://www.vecteezy.com/png/11571450-circle-flag-of-malaysia" target="_blank"
-                rel="noopener noreferrer">
-                Vecteezy
-            </a>
+                rel="noopener noreferrer">Vecteezy</a>
         </p>
         <p id="jokeCounter">Total Jokes in Database: 0</p>
-        <hr>
 
+        <hr class="divider">
 
     </div>
     <script src="index.js" type="module"></script>
