@@ -12,6 +12,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
+
+    <!-- Open Graph (for Discord, Facebook, etc.) -->
+    <meta property="og:title" content="Malaysian Jokes Generator">
+    <meta property="og:description" content="A fun app to generate Malaysian jokes!">
+    <meta property="og:image"
+        content="https://theawakeninganimus.wordpress.com/wp-content/uploads/2021/12/istockphoto-1047259374-612x612-1.jpg">
+    <meta property="og:url" content="https://malaysian-jokes.netlify.app">
+    <meta property="og:type" content="website">
 </head>
 
 <body>
@@ -38,11 +46,11 @@
         </div>
 
         <div>
-            <button class="btn-secondary" id="toggleFormButton">Add Joke</button>
-            <p id="successMessage" style="display: none">🥳 Jokes added successfully! 🎉</p>
+            <button class="btn-secondary" id="toggleFormButton">Add a Joke</button>
+            <p id="successMessage" style="display: none">🥳 Joke added successfully! 🎉</p>
             <p id="boundaryMessage" style="display: none"></p>
             <form id="jokeForm" class="hidden" autocomplete="off">
-                <label for="jokeInput">Write a Joke:</label>
+                <label for="jokeInput">Add your Joke:</label>
                 <textarea id="jokeInput" rows="4"></textarea>
                 <button class="submit-button" type="submit">Submit</button>
             </form>
