@@ -51,6 +51,8 @@ const jokeForm = document.getElementById('jokeForm');
 const jokeInput = document.getElementById('jokeInput');
 const successMessage = document.getElementById('successMessage');
 const toggleFormButton = document.getElementById('toggleFormButton');
+const shareAppButton = document.getElementById('shareAppButton');
+const shareMessage = document.getElementById('shareMessage');
 const jokeCounter = document.getElementById('jokeCounter');
 const deleteJokeButton = document.getElementById('deleteJokeButton');
 const deleteMessage = document.getElementById('deleteMessage');
@@ -119,6 +121,41 @@ function showBoundaryMessage(message) {
 
 function showNoJokesMessage() {
     jokeDisplay.textContent = hasUserInteracted ? noJokesMessage : welcomeMessage;
+}
+
+function showShareMessage(message, isError = false) {
+    if (!shareMessage) return;
+    shareMessage.textContent = message;
+    shareMessage.style.display = 'block';
+    shareMessage.style.color = isError ? '#CC0000' : '#0077b6';
+
+    setTimeout(() => {
+        shareMessage.style.display = 'none';
+    }, 2500);
+}
+
+async function copyAppLinkToClipboard(link) {
+    if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(link);
+        return true;
+    }
+
+    // Fallback for older/non-secure contexts.
+    const textArea = document.createElement('textarea');
+    textArea.value = link;
+    textArea.setAttribute('readonly', '');
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-9999px';
+    document.body.appendChild(textArea);
+    textArea.select();
+
+    let isCopied = false;
+    try {
+        isCopied = document.execCommand('copy');
+    } finally {
+        document.body.removeChild(textArea);
+    }
+    return isCopied;
 }
 
 // ─── Add Joke ─────────────────────────────────────────────────────────────────
@@ -359,6 +396,28 @@ nextJokeButton.addEventListener('click', () => {
     hasUserInteracted = true;
     displayNextJoke();
 });
+if (shareAppButton) {
+    const defaultShareButtonText = '🔗 Share App';
+    shareAppButton.addEventListener('click', async () => {
+        const appLink = window.location.href;
+        try {
+            const copied = await copyAppLinkToClipboard(appLink);
+            if (!copied) throw new Error('Copy command failed');
+
+            shareAppButton.textContent = '✅ Link Copied!';
+            shareAppButton.classList.add('copied');
+            showShareMessage('Link copied. Share it with your friends lah!');
+        } catch (error) {
+            console.error('Error copying share link:', error);
+            showShareMessage('⚠️ Cannot copy now. Please copy URL manually.', true);
+        }
+
+        setTimeout(() => {
+            shareAppButton.textContent = defaultShareButtonText;
+            shareAppButton.classList.remove('copied');
+        }, 2200);
+    });
+}
 if (deleteJokeButton) {
     deleteJokeButton.addEventListener('click', () => {
         hasUserInteracted = true;

@@ -141,6 +141,10 @@ button:active {
     width: 170px;
 }
 
+.btn-row-share button {
+    width: 170px;
+}
+
 /* ── Button colours ── */
 .first-joke-button,
 .last-joke-button,
@@ -165,6 +169,24 @@ button:active {
 
 .random-jokes-button:hover {
     background-color: #a30000;
+}
+
+.share-button {
+    background-color: #FFCC00;
+    color: #010066;
+}
+
+.share-button:hover {
+    background-color: #e6b800;
+}
+
+.share-button.copied {
+    background-color: #010066;
+    color: #ffffff;
+}
+
+.share-button.copied:hover {
+    background-color: #00084d;
 }
 
 .nav-buttons {
@@ -226,14 +248,21 @@ textarea:focus {
     margin: 6px 0 0;
 }
 
+#shareMessage {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0077b6;
+    margin: 2px 0 0;
+}
+
 .hidden {
     display: none;
 }
 
 /* ── Footer ── */
 .footer {
-    font-size: 13px;
-    color: #6c757d;
+    font-size: 15px;
+    color: #495057;
     line-height: 1.7;
     margin: 0;
 }
@@ -307,7 +336,8 @@ textarea:focus {
     }
 
     .btn-row-random button,
-    .btn-row-add button {
+    .btn-row-add button,
+    .btn-row-share button {
         width: 100%;
         max-width: 280px;
     }
