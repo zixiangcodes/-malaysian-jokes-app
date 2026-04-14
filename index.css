@@ -41,7 +41,7 @@ h1 {
 .container {
     background-color: #ffffff;
     margin: auto;
-    padding: 28px 28px 20px;
+    padding: 32px 28px 24px;
     max-width: 600px;
     min-height: 95vh;
     border-radius: 12px;
@@ -77,7 +77,7 @@ h1 {
     font-size: 19px;
     font-weight: 600;
     border-radius: 8px;
-    margin: 18px 0;
+    margin: 22px 0 26px;
     padding: 22px 24px;
     line-height: 1.65;
     box-shadow: 0 2px 8px rgba(1, 0, 102, 0.07);
@@ -113,7 +113,7 @@ button:active {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin: 4px 0 18px;
+    margin: 14px 0 18px;
 }
 
 .btn-row {
@@ -261,7 +261,7 @@ textarea:focus {
 /* ── Responsive ── */
 @media (max-width: 480px) {
     .container {
-        padding: 20px 16px 16px;
+        padding: 24px 16px 18px;
     }
 
     h1 {
@@ -280,5 +280,6 @@ textarea:focus {
 
     .buttons-section {
         gap: 14px;
+        margin-top: 16px;
     }
 }
