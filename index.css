@@ -75,53 +75,53 @@ button {
 }
 
 .random-jokes-button {
-    background-color: mediumorchid;
+    background-color: #CC0000;
 }
 
 .random-jokes-button:hover {
-    background-color: purple;
+    background-color: #a30000;
 }
 
 .first-joke-button {
-    background-color: mediumslateblue;
+    background-color: #010066;
 }
 
 .first-joke-button:hover {
-    background-color: darkslateblue;
+    background-color: #00084d;
 }
 
 .last-joke-button {
-    background-color: mediumslateblue;
+    background-color: #010066;
 }
 
 .last-joke-button:hover {
-    background-color: darkslateblue;
+    background-color: #00084d;
 }
 
 .nav-buttons {
-    background-color: slateGray;
+    background-color: #FFCC00;
+    color: #010066;
 }
 
 .nav-buttons:hover {
-    background-color: dimgray;
+    background-color: #e6b800;
 }
 
 .btn-secondary {
-    background-color: DarkTurquoise;
+    background-color: #CC0000;
 }
 
 .btn-secondary:hover {
-    /* background-color: SteelBlue; */
-    background-color: RoyalBlue;
+    background-color: #a30000;
 }
 
 .submit-button {
-    background-color: purple;
+    background-color: #010066;
 }
 
 .submit-button:hover {
 
-    background-color: magenta;
+    background-color: #00084d;
 }
 
 label {

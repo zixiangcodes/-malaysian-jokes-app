@@ -66,7 +66,7 @@ const nextJokeButton = document.getElementById('nextJokeButton');
 // Variables to keep track of jokes
 let allJokes = [];
 let currentJokeIndex = -1;
-const welcomeMessage = "Welcome, fellow Malaysians!\nClick on 'Random Joke' or 'Add a Joke' to start!";
+const welcomeMessage = "<strong>Welcome, fellow Malaysians!</strong><br>Click on 'Random Joke' or 'Add a Joke' to start!";
 const noJokesMessage = "Alamak, no jokes available yet! Add one lah!";
 let hasUserInteracted = false;
 // Variable to store the Firebase keys alongside the values
