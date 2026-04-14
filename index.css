@@ -21,15 +21,19 @@ h1 {
     font-size: 36px;
     font-family: 'Roboto Slab', serif;
     font-weight: 700;
-    margin: 8px 0 4px;
+    margin: 0 0 4px;
     line-height: 1.2;
+}
+
+.container>hr:first-of-type {
+    margin: 10px 0 24px;
 }
 
 .flag {
     width: 52px;
     height: auto;
     display: block;
-    margin: 8px auto 12px;
+    margin: 0 auto 12px;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.18));
     transition: transform 0.3s ease;
 }
@@ -268,18 +272,32 @@ textarea:focus {
         font-size: 28px;
     }
 
-    .btn-row {
-        flex-direction: column;
-        align-items: center;
+    .buttons-section {
+        gap: 14px;
+        margin-top: 16px;
     }
 
-    .btn-row button {
+    .btn-row {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-row-top button,
+    .btn-row-nav button {
+        width: calc(50% - 8px);
+        max-width: 140px;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .btn-row-random button,
+    .btn-row-add button {
         width: 100%;
         max-width: 280px;
     }
 
-    .buttons-section {
-        gap: 14px;
-        margin-top: 16px;
+    .container>hr:first-of-type {
+        margin: 8px 0 20px;
     }
 }
