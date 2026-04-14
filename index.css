@@ -181,12 +181,12 @@ button:active {
 }
 
 .share-button.copied {
-    background-color: #010066;
-    color: #ffffff;
+    background-color: #d9ad00;
+    color: #010066;
 }
 
 .share-button.copied:hover {
-    background-color: #00084d;
+    background-color: #c79f00;
 }
 
 .nav-buttons {
