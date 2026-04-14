@@ -119,32 +119,32 @@ button:active {
 .btn-row {
     display: flex;
     justify-content: center;
-    gap: 12px;
+    gap: 14px;
     flex-wrap: wrap;
 }
 
 /* ── Button colours ── */
 .first-joke-button,
 .last-joke-button,
-.submit-button {
+.submit-button,
+.btn-secondary {
     background-color: #010066;
     color: #ffffff;
 }
 
 .first-joke-button:hover,
 .last-joke-button:hover,
-.submit-button:hover {
+.submit-button:hover,
+.btn-secondary:hover {
     background-color: #00084d;
 }
 
-.random-jokes-button,
-.btn-secondary {
+.random-jokes-button {
     background-color: #CC0000;
     color: #ffffff;
 }
 
-.random-jokes-button:hover,
-.btn-secondary:hover {
+.random-jokes-button:hover {
     background-color: #a30000;
 }
 
@@ -276,5 +276,9 @@ textarea:focus {
     .btn-row button {
         width: 100%;
         max-width: 280px;
+    }
+
+    .buttons-section {
+        gap: 14px;
     }
 }
