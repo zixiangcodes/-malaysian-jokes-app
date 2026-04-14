@@ -134,7 +134,7 @@ button:active {
 }
 
 .btn-row-random button {
-    width: 170px;
+    width: 210px;
 }
 
 .btn-row-add button {
@@ -160,6 +160,7 @@ button:active {
 .random-jokes-button {
     background-color: #CC0000;
     color: #ffffff;
+    white-space: nowrap;
 }
 
 .random-jokes-button:hover {
