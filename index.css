@@ -127,6 +127,20 @@ button:active {
     flex-wrap: wrap;
 }
 
+/* Keep desktop rows visually aligned like mobile */
+.btn-row-top button,
+.btn-row-nav button {
+    width: 170px;
+}
+
+.btn-row-random button {
+    width: 170px;
+}
+
+.btn-row-add button {
+    width: 170px;
+}
+
 /* ── Button colours ── */
 .first-joke-button,
 .last-joke-button,
