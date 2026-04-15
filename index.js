@@ -164,6 +164,8 @@ jokeForm.addEventListener('submit', (e) => {
     e.preventDefault();
     hasUserInteracted = true;
 
+    if (isRateLimited()) return; // Check rate limit before allowing submission
+
     if (!jokesRef) {
         showNoJokesMessage();
         return;
@@ -431,6 +433,34 @@ if (deleteJokeButton) {
         hasUserInteracted = true;
         deleteCurrentJoke();
     });
+}
+
+// ─── Rate Limiter (Client-side) ───────────────────────────────────────────────
+const RATE_LIMIT = {
+    maxSubmissions: 5,   // max jokes
+    windowMs: 30_000,    // per 30 seconds
+    storageKey: 'mjg_submissions'
+};
+
+function isRateLimited() {
+    const now = Date.now();
+    const raw = localStorage.getItem(RATE_LIMIT.storageKey);
+    const timestamps = raw ? JSON.parse(raw) : [];
+
+    // Keep only timestamps within the current window
+    const recent = timestamps.filter(t => now - t < RATE_LIMIT.windowMs);
+
+    if (recent.length >= RATE_LIMIT.maxSubmissions) {
+        const oldestMs = RATE_LIMIT.windowMs - (now - recent[0]);
+        const secondsLeft = Math.ceil(oldestMs / 1000);
+        showBoundaryMessage(`⚠️ Slow down lah! Try again in ${secondsLeft}s.`);
+        return true;
+    }
+
+    // Record this submission attempt
+    recent.push(now);
+    localStorage.setItem(RATE_LIMIT.storageKey, JSON.stringify(recent));
+    return false;
 }
 
 // ─── Initialise ───────────────────────────────────────────────────────────────
