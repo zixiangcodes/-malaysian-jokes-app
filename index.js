@@ -71,7 +71,7 @@ let allJokes = [];
 let currentJokeIndex = -1;
 const welcomeMessage = "Welcome, fellow Malaysians!\nClick on 'Random Joke' or 'Add a Joke' to start!";
 const noJokesMessage = "Alamak, no jokes available yet! Add one lah!";
-const minJokeLength = 100;
+const minJokeLength = 50;
 let hasUserInteracted = false;
 // Variable to store the Firebase keys alongside the values
 let allJokesKeys = [];
@@ -198,7 +198,7 @@ jokeForm.addEventListener('submit', (e) => {
             .catch((error) => {
                 console.error('Error adding joke:', error);
                 if (error.code === 'PERMISSION_DENIED') {
-                    showBoundaryMessage("⚠️ Joke must be between 100 and 500 characters lah!");
+                    showBoundaryMessage("⚠️ Joke must be between 50 and 500 characters lah!");
                 } else {
                     showBoundaryMessage("⚠️ Alamak, something went wrong. Try again lah!");
                 }
