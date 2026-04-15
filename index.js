@@ -203,6 +203,8 @@ jokeForm.addEventListener('submit', (e) => {
                     showBoundaryMessage("⚠️ Alamak, something went wrong. Try again lah!");
                 }
             });
+    } else {
+        showBoundaryMessage("⚠️ Walao! Mabuk? Cannot submit empty joke lah!");
     }
 });
 
