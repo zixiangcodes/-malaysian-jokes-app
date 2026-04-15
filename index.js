@@ -268,7 +268,15 @@ function fetchJokes(navigateToKey = null) {
 // Function to display a random joke
 function displayRandomJoke() {
     if (allJokes.length > 0) {
-        currentJokeIndex = Math.floor(Math.random() * allJokes.length);
+        if (allJokes.length === 1) {
+            currentJokeIndex = 0;
+        } else {
+            let randomIndex = Math.floor(Math.random() * allJokes.length);
+            while (randomIndex === currentJokeIndex) {
+                randomIndex = Math.floor(Math.random() * allJokes.length);
+            }
+            currentJokeIndex = randomIndex;
+        }
         displayJoke();
     } else {
         showNoJokesMessage();
