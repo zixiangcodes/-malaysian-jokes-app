@@ -49,6 +49,7 @@ const generateRandomJokeButton = document.getElementById('generateRandomJokeButt
 const jokeDisplay = document.getElementById('joke-display');
 const jokeForm = document.getElementById('jokeForm');
 const jokeInput = document.getElementById('jokeInput');
+const jokeCharCounter = document.getElementById('jokeCharCounter');
 const successMessage = document.getElementById('successMessage');
 const toggleFormButton = document.getElementById('toggleFormButton');
 const shareAppButton = document.getElementById('shareAppButton');
@@ -70,6 +71,7 @@ let allJokes = [];
 let currentJokeIndex = -1;
 const welcomeMessage = "Welcome, fellow Malaysians!\nClick on 'Random Joke' or 'Add a Joke' to start!";
 const noJokesMessage = "Alamak, no jokes available yet! Add one lah!";
+const minJokeLength = 100;
 let hasUserInteracted = false;
 // Variable to store the Firebase keys alongside the values
 let allJokesKeys = [];
@@ -87,6 +89,7 @@ toggleFormButton.addEventListener('click', () => {
         toggleFormButton.textContent = 'Add a Joke';
     } else {
         toggleFormButton.textContent = 'Hide Form';
+        updateJokeCharCounter();
     }
 });
 
@@ -121,6 +124,14 @@ function showBoundaryMessage(message) {
 
 function showNoJokesMessage() {
     jokeDisplay.textContent = hasUserInteracted ? noJokesMessage : welcomeMessage;
+}
+
+function updateJokeCharCounter() {
+    if (!jokeInput || !jokeCharCounter) return;
+
+    const currentLength = jokeInput.value.length;
+    jokeCharCounter.textContent = `${currentLength} / ${minJokeLength} characters`;
+    jokeCharCounter.style.color = currentLength >= minJokeLength ? '#0077b6' : '#495057';
 }
 
 function showShareMessage(message, isError = false) {
@@ -178,6 +189,7 @@ jokeForm.addEventListener('submit', (e) => {
             .then((pushRef) => {
                 const newJokeKey = pushRef.key;
                 jokeInput.value = '';
+                updateJokeCharCounter();
                 jokeForm.classList.add('hidden');
                 toggleFormButton.textContent = 'Add a Joke';
                 showSuccessMessage();
@@ -410,6 +422,7 @@ nextJokeButton.addEventListener('click', () => {
     hasUserInteracted = true;
     displayNextJoke();
 });
+jokeInput.addEventListener('input', updateJokeCharCounter);
 if (shareAppButton) {
     const defaultShareButtonText = '🔗 Share App';
     shareAppButton.addEventListener('click', async () => {
@@ -470,5 +483,6 @@ function isRateLimited() {
 // ─── Initialise ───────────────────────────────────────────────────────────────
 // Render the default welcome text immediately on load.
 jokeDisplay.textContent = welcomeMessage;
+updateJokeCharCounter();
 // Fetch jokes when the page loads
 fetchJokes();
