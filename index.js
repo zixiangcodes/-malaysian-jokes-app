@@ -186,7 +186,7 @@ jokeForm.addEventListener('submit', (e) => {
             .catch((error) => {
                 console.error('Error adding joke:', error);
                 if (error.code === 'PERMISSION_DENIED') {
-                    showBoundaryMessage("⚠️ Joke must be between 5 and 500 characters lah!");
+                    showBoundaryMessage("⚠️ Joke must be between 100 and 500 characters lah!");
                 } else {
                     showBoundaryMessage("⚠️ Alamak, something went wrong. Try again lah!");
                 }
