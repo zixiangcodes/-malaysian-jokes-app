@@ -1,11 +1,8 @@
 // ─── Firebase Imports ────────────────────────────────────────────────────────
-// import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"
-// import { getDatabase, ref, push, get, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
 import { getDatabase, ref, push, get, remove } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-database.js";
 
 // ─── Firebase Configuration ───────────────────────────────────────────────────
-// Your web app's Firebase configuration
 // 🔒 Security reminder: restrict this API key to your domain in Google Cloud Console
 // https://console.cloud.google.com/apis/credentials
 
@@ -19,37 +16,20 @@ const firebaseConfig = {
     appId: "1:68086689421:web:5dcc1d92ce47d08610fcc4"
 };
 
-// Example (use your own values; do not commit secrets):
-// const firebaseConfig = {
-//     apiKey: "<your-api-key>",
-//     authDomain: "<your-auth-domain>",
-//     databaseURL: "<your-database-url>",
-//     projectId: "<your-project-id>",
-//     storageBucket: "<your-storage-bucket>",
-//     messagingSenderId: "<your-messaging-sender-id>",
-//     appId: "<your-app-id>"
-// };
-
 // ─── Initialise Firebase ─────────────────────────────────────────────────────
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const jokesRef = ref(database, "jokes");
 
-// if (missingFirebaseVars.length === 0) {
-//     app = initializeApp(firebaseConfig);
-//     database = getDatabase(app);
-//     jokesRef = ref(database, "jokes");
-// } else {
-//     const missingList = missingFirebaseVars.map(([name]) => name).join(', ');
-//     console.error(`Missing Firebase config variables: ${missingList}`);
-// }
-
-// ─── Select page DOM Elements ─────────────────────────────────────────────────────────────
+// ─── Select page DOM Elements ─────────────────────────────────────────────────
 const generateRandomJokeButton = document.getElementById('generateRandomJokeButton');
 const jokeDisplay = document.getElementById('joke-display');
 const jokeForm = document.getElementById('jokeForm');
-const jokeInput = document.getElementById('jokeInput');
-const jokeCharCounter = document.getElementById('jokeCharCounter');
+const jokeTitleInput = document.getElementById('jokeTitleInput');
+const jokeContentInput = document.getElementById('jokeContentInput');
+const jokeTitleCharCounter = document.getElementById('jokeTitleCharCounter');
+const jokeContentCharCounter = document.getElementById('jokeContentCharCounter');
+
 const successMessage = document.getElementById('successMessage');
 const toggleFormButton = document.getElementById('toggleFormButton');
 const shareAppButton = document.getElementById('shareAppButton');
@@ -59,63 +39,53 @@ const deleteJokeButton = document.getElementById('deleteJokeButton');
 const deleteMessage = document.getElementById('deleteMessage');
 const boundaryMessage = document.getElementById('boundaryMessage');
 
-// Select the navigation buttons from HTML (with corrected IDs)
 const prevJokeButton = document.getElementById('prevJokeButton');
 const firstJokeButton = document.getElementById('firstJokeButton');
 const lastJokeButton = document.getElementById('lastJokeButton');
 const nextJokeButton = document.getElementById('nextJokeButton');
 
+// ─── Constants ────────────────────────────────────────────────────────────────
+const MIN_TITLE_LENGTH = 15;
+const MAX_TITLE_LENGTH = 100;
+const MIN_CONTENT_LENGTH = 50;
+const MAX_CONTENT_LENGTH = 750;
+
 // ─── State ────────────────────────────────────────────────────────────────────
-// Variables to keep track of jokes
-let allJokes = [];
+let allJokes = [];        // Array of joke objects: { joke_title, joke_content }
+let allJokesKeys = [];    // Corresponding Firebase keys
 let currentJokeIndex = -1;
-const welcomeMessage = "Welcome, fellow Malaysians!\nClick on 'Random Joke' or 'Add a Joke' to start!";
-const noJokesMessage = "Alamak, no jokes available yet! Add one lah!";
-const minJokeLength = 50;
 let hasUserInteracted = false;
-// Variable to store the Firebase keys alongside the values
-let allJokesKeys = [];
-// Variable to set boundary message (first or last jokes) as null first, to clear it when buttons are clicked.
 let boundaryMessageTimeout = null;
 
-// ─── FUNCTIONS ───────────────────────────────────────────────────────────────
+const welcomeMessage = "Welcome, fellow Malaysians!\nClick on 'Random Joke' or 'Add a Joke' to start!";
+const noJokesMessage = "Alamak, no jokes available yet! Add one lah!";
 
 // ─── Toggle Add Joke Form ─────────────────────────────────────────────────────
-
-// Function to show/hide the submission form
 toggleFormButton.addEventListener('click', () => {
     jokeForm.classList.toggle('hidden');
     if (jokeForm.classList.contains('hidden')) {
-        toggleFormButton.textContent = 'Add a Joke';
+        toggleFormButton.textContent = '+ Add a Joke';
     } else {
         toggleFormButton.textContent = 'Hide Form';
-        updateJokeCharCounter();
+        updateCharCounters();
     }
 });
 
 // ─── UI Helpers ───────────────────────────────────────────────────────────────
-
-// Function to show the success message for 3 seconds
 function showSuccessMessage() {
     successMessage.style.display = 'block';
-    setTimeout(() => {
-        successMessage.style.display = 'none';
-    }, 3000);
+    setTimeout(() => { successMessage.style.display = 'none'; }, 3000);
 }
 
-// Function to show the delete success message for 3 seconds
 function showDeleteMessage() {
+    if (!deleteMessage) return;
     deleteMessage.style.display = 'block';
-    setTimeout(() => {
-        deleteMessage.style.display = 'none';
-    }, 3000);
+    setTimeout(() => { deleteMessage.style.display = 'none'; }, 3000);
 }
 
-// Shows message for users
 function showBoundaryMessage(message) {
     boundaryMessage.textContent = message;
     boundaryMessage.style.display = 'block';
-
     clearTimeout(boundaryMessageTimeout);
     boundaryMessageTimeout = setTimeout(() => {
         boundaryMessage.style.display = 'none';
@@ -126,32 +96,40 @@ function showNoJokesMessage() {
     jokeDisplay.textContent = hasUserInteracted ? noJokesMessage : welcomeMessage;
 }
 
-function updateJokeCharCounter() {
-    if (!jokeInput || !jokeCharCounter) return;
-
-    const currentLength = jokeInput.value.length;
-    jokeCharCounter.textContent = `${currentLength} / ${minJokeLength} characters`;
-    jokeCharCounter.style.color = currentLength >= minJokeLength ? '#0077b6' : '#495057';
-}
-
 function showShareMessage(message, isError = false) {
     if (!shareMessage) return;
     shareMessage.textContent = message;
     shareMessage.style.display = 'block';
     shareMessage.style.color = isError ? '#CC0000' : '#0077b6';
-
-    setTimeout(() => {
-        shareMessage.style.display = 'none';
-    }, 2500);
+    setTimeout(() => { shareMessage.style.display = 'none'; }, 2500);
 }
 
+// ─── Character Counters ───────────────────────────────────────────────────────
+function updateCharCounters() {
+    updateTitleCharCounter();
+    updateContentCharCounter();
+}
+
+function updateTitleCharCounter() {
+    if (!jokeTitleInput || !jokeTitleCharCounter) return;
+    const len = jokeTitleInput.value.length;
+    jokeTitleCharCounter.textContent = `${len} / ${MAX_TITLE_LENGTH} characters (min: ${MIN_TITLE_LENGTH})`;
+    jokeTitleCharCounter.style.color = (len >= MIN_TITLE_LENGTH && len <= MAX_TITLE_LENGTH) ? '#0077b6' : '#495057';
+}
+
+function updateContentCharCounter() {
+    if (!jokeContentInput || !jokeContentCharCounter) return;
+    const len = jokeContentInput.value.length;
+    jokeContentCharCounter.textContent = `${len} / ${MAX_CONTENT_LENGTH} characters (min: ${MIN_CONTENT_LENGTH})`;
+    jokeContentCharCounter.style.color = len >= MIN_CONTENT_LENGTH && len <= MAX_CONTENT_LENGTH ? '#0077b6' : '#495057';
+}
+
+// ─── Clipboard Helper ─────────────────────────────────────────────────────────
 async function copyAppLinkToClipboard(link) {
     if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(link);
         return true;
     }
-
-    // Fallback for older/non-secure contexts.
     const textArea = document.createElement('textarea');
     textArea.value = link;
     textArea.setAttribute('readonly', '');
@@ -159,7 +137,6 @@ async function copyAppLinkToClipboard(link) {
     textArea.style.left = '-9999px';
     document.body.appendChild(textArea);
     textArea.select();
-
     let isCopied = false;
     try {
         isCopied = document.execCommand('copy');
@@ -170,70 +147,81 @@ async function copyAppLinkToClipboard(link) {
 }
 
 // ─── Add Joke ─────────────────────────────────────────────────────────────────
-// Function to handle add new jokes via form submission
 jokeForm.addEventListener('submit', (e) => {
     e.preventDefault();
     hasUserInteracted = true;
 
-    if (isRateLimited()) return; // Check rate limit before allowing submission
+    if (isRateLimited()) return;
 
     if (!jokesRef) {
         showNoJokesMessage();
         return;
     }
 
-    const newJoke = jokeInput.value.trim();
+    const newTitle = jokeTitleInput.value.trim();
+    const newContent = jokeContentInput.value.trim();
 
-    if (newJoke !== '') {
-        push(jokesRef, newJoke)
-            .then((pushRef) => {
-                const newJokeKey = pushRef.key;
-                jokeInput.value = '';
-                updateJokeCharCounter();
-                jokeForm.classList.add('hidden');
-                toggleFormButton.textContent = 'Add a Joke';
-                showSuccessMessage();
-                fetchJokes(newJokeKey); // Refresh and navigate to the new jokes
-            })
-            .catch((error) => {
-                console.error('Error adding joke:', error);
-                if (error.code === 'PERMISSION_DENIED') {
-                    showBoundaryMessage("⚠️ Joke must be between 50 and 500 characters lah!");
-                } else {
-                    showBoundaryMessage("⚠️ Alamak, something went wrong. Try again lah!");
-                }
-            });
-    } else {
-        showBoundaryMessage("⚠️ Walao! Mabuk? Cannot submit empty joke lah!");
+    // Validate title
+    if (newTitle === '') {
+        showBoundaryMessage("⚠️ Walao! Cannot submit without a joke title lah!");
+        return;
     }
+    if (newTitle.length < MIN_TITLE_LENGTH) {
+        showBoundaryMessage(`⚠️ Title too short lah! Minimum ${MIN_TITLE_LENGTH} characters.`);
+        return;
+    }
+    if (newTitle.length > MAX_TITLE_LENGTH) {
+        showBoundaryMessage(`⚠️ Title too long lah! Keep it under ${MAX_TITLE_LENGTH} characters.`);
+        return;
+    }
+
+    // Validate content
+    if (newContent === '') {
+        showBoundaryMessage("⚠️ Walao! Mabuk? Cannot submit empty joke lah!");
+        return;
+    }
+    if (newContent.length < MIN_CONTENT_LENGTH) {
+        showBoundaryMessage(`⚠️ Joke too short lah! Minimum ${MIN_CONTENT_LENGTH} characters.`);
+        return;
+    }
+    if (newContent.length > MAX_CONTENT_LENGTH) {
+        showBoundaryMessage(`⚠️ Joke too long lah! Maximum ${MAX_CONTENT_LENGTH} characters.`);
+        return;
+    }
+
+    const newJokeObj = {
+        joke_title: newTitle,
+        joke_content: newContent
+    };
+
+    push(jokesRef, newJokeObj)
+        .then((pushRef) => {
+            const newJokeKey = pushRef.key;
+            jokeTitleInput.value = '';
+            jokeContentInput.value = '';
+            updateCharCounters();
+            jokeForm.classList.add('hidden');
+            toggleFormButton.textContent = '+ Add a Joke';
+            showSuccessMessage();
+            fetchJokes(newJokeKey); // Refresh and navigate to the new joke
+        })
+        .catch((error) => {
+            console.error('Error adding joke:', error);
+            if (error.code === 'PERMISSION_DENIED') {
+                showBoundaryMessage("⚠️ Permission denied lah! Check your database rules.");
+            } else {
+                showBoundaryMessage("⚠️ Alamak, something went wrong. Try again lah!");
+            }
+        });
 });
 
 // ─── Fetch & Display ──────────────────────────────────────────────────────────
 
 /**
- * Fetches all jokes from Firebase in a single call.
- * Also updates the joke counter from the same snapshot (no extra DB read).
+ * Fetches all jokes from Firebase.
+ * Each joke is now an object: { joke_title, joke_content }
  * @param {string|null} navigateToKey - If provided, navigates to that joke after fetch.
  */
-// // Function to update the counter
-// function updateJokeCounter() {
-//     get(jokesRef).then((snapshot) => {
-//         if (snapshot.exists()) {
-//             const jokesData = snapshot.val();
-//             const count = Object.keys(jokesData).length;
-//             jokeCounter.textContent = `Total Jokes in Database: ${count}`;
-//         } else {
-//             jokeCounter.textContent = 'Total Jokes in Database: 0';
-//         }
-//     }).catch((error) => {
-//         console.error('Error fetching joke count:', error);
-//     });
-// }
-// Call this function when the page loads
-// updateJokeCounter();
-
-// Function to fetch jokes data from Firebase (stores both keys and values)
-// Optional: navigateToKey - when provided (e.g. after creating new jokes), navigate to that joke
 function fetchJokes(navigateToKey = null) {
     if (!jokesRef) {
         allJokes = [];
@@ -248,11 +236,10 @@ function fetchJokes(navigateToKey = null) {
         .then((snapshot) => {
             if (snapshot.exists()) {
                 const jokesData = snapshot.val();
-                allJokes = Object.values(jokesData);
+                allJokes = Object.values(jokesData);    // Array of { joke_title, joke_content }
                 allJokesKeys = Object.keys(jokesData);
 
-                // ✅ Counter updated from the same snapshot — no extra Firebase call
-                jokeCounter.textContent = `Total Jokes in Database: ${allJokes.length}`;
+                jokeCounter.textContent = `Total Jokes in Database: ${allJokes.length} `;
 
                 if (navigateToKey !== null) {
                     const newIndex = allJokesKeys.indexOf(navigateToKey);
@@ -263,13 +250,14 @@ function fetchJokes(navigateToKey = null) {
                         displayRandomJoke();
                     }
                 } else if (currentJokeIndex === -1) {
-                    // Keep welcome message on first load; only show a random joke
-                    // after explicit user interaction.
                     if (hasUserInteracted) {
                         displayRandomJoke();
                     } else {
                         jokeDisplay.textContent = welcomeMessage;
                     }
+                } else {
+                    // Re-render current joke (e.g. after a delete)
+                    displayJoke();
                 }
             } else {
                 allJokes = [];
@@ -281,20 +269,34 @@ function fetchJokes(navigateToKey = null) {
         })
         .catch((error) => {
             console.error('Error fetching jokes:', error);
-            jokeDisplay.textContent = "⚠️Eh, something went wrong. Try again lah!";
+            jokeDisplay.textContent = "⚠️ Eh, something went wrong. Try again lah!";
         });
 }
 
-// Function to display a random joke
+// ─── Display Helpers ──────────────────────────────────────────────────────────
+
+/**
+ * Displays the joke at currentJokeIndex.
+ * Renders both joke_title and joke_content from the joke object.
+ */
+function displayJoke() {
+    if (currentJokeIndex >= 0 && currentJokeIndex < allJokes.length) {
+        const joke = allJokes[currentJokeIndex];
+        const title = joke.joke_title || '(No Title)';
+        const content = joke.joke_content || '(No Content)';
+        jokeDisplay.textContent = `#${currentJokeIndex + 1} — [${title}]\n${content} `;
+    }
+}
+
 function displayRandomJoke() {
     if (allJokes.length > 0) {
         if (allJokes.length === 1) {
             currentJokeIndex = 0;
         } else {
-            let randomIndex = Math.floor(Math.random() * allJokes.length);
-            while (randomIndex === currentJokeIndex) {
+            let randomIndex;
+            do {
                 randomIndex = Math.floor(Math.random() * allJokes.length);
-            }
+            } while (randomIndex === currentJokeIndex);
             currentJokeIndex = randomIndex;
         }
         displayJoke();
@@ -303,7 +305,6 @@ function displayRandomJoke() {
     }
 }
 
-// Function to display the first joke (FIXED: was using assignment instead of comparison)
 function displayFirstJoke() {
     if (allJokes.length > 0) {
         if (currentJokeIndex === 0) {
@@ -317,7 +318,6 @@ function displayFirstJoke() {
     }
 }
 
-// Function to display the last joke
 function displayLastJoke() {
     if (allJokes.length > 0) {
         if (currentJokeIndex === allJokes.length - 1) {
@@ -331,15 +331,6 @@ function displayLastJoke() {
     }
 }
 
-// Function to display the current joke
-function displayJoke() {
-    if (currentJokeIndex >= 0 && currentJokeIndex < allJokes.length) {
-        const joke = allJokes[currentJokeIndex];
-        jokeDisplay.textContent = `#${currentJokeIndex + 1}: ${joke}`;
-    }
-}
-
-// Function to display the previous joke
 function displayPreviousJoke() {
     if (allJokes.length > 0) {
         currentJokeIndex = (currentJokeIndex - 1 + allJokes.length) % allJokes.length;
@@ -349,7 +340,6 @@ function displayPreviousJoke() {
     }
 }
 
-// Function to display the next joke
 function displayNextJoke() {
     if (allJokes.length > 0) {
         currentJokeIndex = (currentJokeIndex + 1) % allJokes.length;
@@ -361,9 +351,6 @@ function displayNextJoke() {
 
 // ─── Delete Joke ──────────────────────────────────────────────────────────────
 // 🔒 Delete button is commented out in HTML for V1.0 (admin only)
-// This logic is kept here and ready for when it's re-enabled.
-
-// Function to delete the current joke
 function deleteCurrentJoke() {
     if (!jokesRef) {
         showNoJokesMessage();
@@ -375,25 +362,20 @@ function deleteCurrentJoke() {
         if (!isConfirmed) return;
 
         const keyToDelete = allJokesKeys[currentJokeIndex];
-        const jokeRef = ref(database, `jokes/${keyToDelete}`);
+        const jokeRef = ref(database, `jokes / ${keyToDelete} `);
 
         remove(jokeRef)
             .then(() => {
                 showDeleteMessage();
 
-                // Adjust currentJokeIndex after deletion
                 if (allJokes.length === 1) {
-                    // If this was the last joke
                     currentJokeIndex = -1;
-                    jokeDisplay.textContent = "Alamak, no jokes yet! Add one lah!";
+                    jokeDisplay.textContent = noJokesMessage;
                 } else if (currentJokeIndex >= allJokes.length - 1) {
-                    // If we deleted the last joke, go to the previous one
                     currentJokeIndex = allJokes.length - 2;
                 }
-                // If we deleted a joke in the middle, currentJokeIndex stays the same
-                // which will now point to the next joke
 
-                fetchJokes(); // ✅ displayJoke() happens inside fetchJokes() — no setTimeout needed
+                fetchJokes();
             })
             .catch((error) => {
                 console.error('Error deleting joke:', error);
@@ -403,7 +385,6 @@ function deleteCurrentJoke() {
 }
 
 // ─── Event Listeners ──────────────────────────────────────────────────────────
-// Add click event listeners to the buttons
 generateRandomJokeButton.addEventListener('click', () => {
     hasUserInteracted = true;
     displayRandomJoke();
@@ -424,15 +405,17 @@ nextJokeButton.addEventListener('click', () => {
     hasUserInteracted = true;
     displayNextJoke();
 });
-jokeInput.addEventListener('input', updateJokeCharCounter);
+
+jokeTitleInput.addEventListener('input', updateTitleCharCounter);
+jokeContentInput.addEventListener('input', updateContentCharCounter);
+
 if (shareAppButton) {
-    const defaultShareButtonText = '🔗 Share App';
+    const defaultShareButtonText = '🔗 Share Link';
     shareAppButton.addEventListener('click', async () => {
         const appLink = window.location.href;
         try {
             const copied = await copyAppLinkToClipboard(appLink);
             if (!copied) throw new Error('Copy command failed');
-
             shareAppButton.textContent = '✅ Link Copied!';
             shareAppButton.classList.add('copied');
             showShareMessage('Link copied. Share it with your friends lah!');
@@ -440,13 +423,13 @@ if (shareAppButton) {
             console.error('Error copying share link:', error);
             showShareMessage('⚠️ Cannot copy now. Please copy URL manually.', true);
         }
-
         setTimeout(() => {
             shareAppButton.textContent = defaultShareButtonText;
             shareAppButton.classList.remove('copied');
         }, 2200);
     });
 }
+
 if (deleteJokeButton) {
     deleteJokeButton.addEventListener('click', () => {
         hasUserInteracted = true;
@@ -456,8 +439,8 @@ if (deleteJokeButton) {
 
 // ─── Rate Limiter (Client-side) ───────────────────────────────────────────────
 const RATE_LIMIT = {
-    maxSubmissions: 5,   // max jokes
-    windowMs: 30_000,    // per 30 seconds
+    maxSubmissions: 5,
+    windowMs: 30_000,
     storageKey: 'mjg_submissions'
 };
 
@@ -465,26 +448,21 @@ function isRateLimited() {
     const now = Date.now();
     const raw = localStorage.getItem(RATE_LIMIT.storageKey);
     const timestamps = raw ? JSON.parse(raw) : [];
-
-    // Keep only timestamps within the current window
     const recent = timestamps.filter(t => now - t < RATE_LIMIT.windowMs);
 
     if (recent.length >= RATE_LIMIT.maxSubmissions) {
         const oldestMs = RATE_LIMIT.windowMs - (now - recent[0]);
         const secondsLeft = Math.ceil(oldestMs / 1000);
-        showBoundaryMessage(`⚠️ Slow down lah! Try again in ${secondsLeft}s.`);
+        showBoundaryMessage(`⚠️ Slow down lah! Try again in ${secondsLeft} s.`);
         return true;
     }
 
-    // Record this submission attempt
     recent.push(now);
     localStorage.setItem(RATE_LIMIT.storageKey, JSON.stringify(recent));
     return false;
 }
 
 // ─── Initialise ───────────────────────────────────────────────────────────────
-// Render the default welcome text immediately on load.
 jokeDisplay.textContent = welcomeMessage;
-updateJokeCharCounter();
-// Fetch jokes when the page loads
+updateCharCounters();
 fetchJokes();

@@ -32,6 +32,7 @@
         </h1>
 
         <p><b>Cause why not lah!!? 😆</b></p>
+        <!-- This is where the joke will be displayed-->
         <p class="display" id="joke-display"></p>
         <hr>
         <div class="buttons-section">
@@ -61,9 +62,12 @@
             <p id="successMessage" style="display: none">🥳 Joke added successfully! 🎉</p>
             <p id="boundaryMessage" style="display: none"></p>
             <form id="jokeForm" class="hidden" autocomplete="off">
-                <label for="jokeInput">Add your Joke:</label>
-                <textarea id="jokeInput" rows="4" placeholder="Type your joke here..."></textarea>
-                <p id="jokeCharCounter" aria-live="polite">0 / 50 characters</p>
+                <label for="jokeTitleInput">Joke Title:</label>
+                <input type="text" id="jokeTitleInput" placeholder="Enter your joke title... you may add an emoji too!">
+                <p id="jokeTitleCharCounter" aria-live="polite">0 / 100 characters (min: 15)</p>
+                <label for="jokeContentInput">Joke Content:</label>
+                <textarea id="jokeContentInput" rows="4" placeholder="Type your joke here..."></textarea>
+                <p id="jokeContentCharCounter" aria-live="polite">0 / 750 characters (min: 50)</p>
                 <button class="submit-button" type="submit">Submit</button>
             </form>
         </div>
@@ -74,7 +78,7 @@
         <hr class="divider">
 
         <p class="footer">
-            By: Zack Ng &nbsp;|&nbsp; Last Updated: 15 April 2026, V1.0 &nbsp;|&nbsp; Firebase Realtime Database
+            By: Zack Ng &nbsp;|&nbsp; Last Updated: 20 April 2026, V1.1 &nbsp;|&nbsp; Firebase Realtime Database
         </p>
         <p class="footer">
             Credits: Circle flag of Malaysia. Free PNG by stu - khaii at
