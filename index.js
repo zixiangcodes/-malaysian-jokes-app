@@ -383,7 +383,7 @@ function deleteCurrentJoke() {
         if (!isConfirmed) return;
 
         const keyToDelete = allJokesKeys[currentJokeIndex];
-        const jokeRef = ref(database, `jokes / ${keyToDelete} `);
+        const jokeRef = ref(database, `jokes/${keyToDelete}`);
 
         remove(jokeRef)
             .then(() => {
