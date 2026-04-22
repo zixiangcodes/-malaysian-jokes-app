@@ -114,14 +114,28 @@ function updateTitleCharCounter() {
     if (!jokeTitleInput || !jokeTitleCharCounter) return;
     const len = jokeTitleInput.value.length;
     jokeTitleCharCounter.textContent = `${len} / ${MAX_TITLE_LENGTH} characters (min: ${MIN_TITLE_LENGTH})`;
-    jokeTitleCharCounter.style.color = (len >= MIN_TITLE_LENGTH && len <= MAX_TITLE_LENGTH) ? '#0077b6' : '#495057';
+
+    if (len > MAX_TITLE_LENGTH) {
+        jokeTitleCharCounter.style.color = '#CC0000'; // Red — over limit
+    } else if (len >= MIN_TITLE_LENGTH) {
+        jokeTitleCharCounter.style.color = '#0077b6'; // Blue — valid
+    } else {
+        jokeTitleCharCounter.style.color = '#495057'; // Grey — too short
+    }
 }
 
 function updateContentCharCounter() {
     if (!jokeContentInput || !jokeContentCharCounter) return;
     const len = jokeContentInput.value.length;
     jokeContentCharCounter.textContent = `${len} / ${MAX_CONTENT_LENGTH} characters (min: ${MIN_CONTENT_LENGTH})`;
-    jokeContentCharCounter.style.color = len >= MIN_CONTENT_LENGTH && len <= MAX_CONTENT_LENGTH ? '#0077b6' : '#495057';
+
+    if (len > MAX_CONTENT_LENGTH) {
+        jokeContentCharCounter.style.color = '#CC0000'; // Red — over limit
+    } else if (len >= MIN_CONTENT_LENGTH) {
+        jokeContentCharCounter.style.color = '#0077b6'; // Blue — valid
+    } else {
+        jokeContentCharCounter.style.color = '#495057'; // Grey — too short
+    }
 }
 
 // ─── Clipboard Helper ─────────────────────────────────────────────────────────
