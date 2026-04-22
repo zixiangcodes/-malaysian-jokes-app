@@ -189,6 +189,13 @@ jokeForm.addEventListener('submit', (e) => {
         return;
     }
 
+    // Zalgo Character Check
+    const zalgoRegex = /[\u0300-\u036f\u0489]/;
+    if (zalgoRegex.test(newTitle) || zalgoRegex.test(newContent)) {
+        showBoundaryMessage("⚠️ Eh, no funny characters lah!");
+        return;
+    }
+
     const newJokeObj = {
         joke_title: newTitle,
         joke_content: newContent
